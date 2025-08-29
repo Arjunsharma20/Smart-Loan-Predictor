@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loan Prediction Form</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    body {
+      background: url("https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?ixlib=rb-4.0.3&auto=format&fit=crop&w=1400&q=80") no-repeat center center fixed;
+      background-size: cover;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    .form-container {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 40px;
+      border-radius: 25px;
+      box-shadow: 0 10px 35px rgba(0,0,0,0.35);
+      width: 95%;
+      max-width: 900px;
+    }
+    .form-header {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+    .btn-custom {
+      background: #2575fc;
+      color: white;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+    .btn-custom:hover {
+      background: #6a11cb;
+      color: #fff;
+    }
+    .input-group-text {
+      background: #2575fc;
+      color: white;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <div class="form-header">
+      <img src="https://cdn-icons-png.flaticon.com/512/3135/3135789.png" width="80" alt="Loan Icon">
+      <h2 class="text-primary mt-2">💰 Loan Prediction Form</h2>
+      <p class="text-muted">Fill in details to check your loan eligibility</p>
+    </div>
+
+    {% if error %}
+      <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+
+    <form method="post" action="/predict_form/" id="loanForm">
+      {% csrf_token %}
+      <div class="row g-3">
+
+        <!-- Age -->
+        <div class="col-md-4">
+          <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-person-circle"></i></span>
+            <input type="number" class="form-control" name="person_age" placeholder="Age" required>
+          </div>
+        </div>
+
+        <!-- Gender -->
+        <div class="col-md-4">
+          <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-gender-ambiguous"></i></span>
+            <select class="form-select" name="person_gender" required>
+              <option value="">Gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Education -->
+        <div class="col-md-4">
+          <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-mortarboard-fill"></i></span>
+            <select class="form-select" name="person_education" required>
+              <option value="">Education</option>
+              <option value="High School">High School</option>
+              <option value="Bachelor">Bachelor</option>
+              <option value="Master">Master</option>
+              <option value="PhD">PhD</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Income -->
+        <div class="col-md-4">
+          <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-wallet2"></i></span>
+            <input type="number" class="form-control" id="income" name="person_income" placeholder="Income" required>
+          </div>
+        </div>
+
+        <!-- Income Currency -->
+        <div class="col-md-4">
+          <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-currency-exchange"></i></span>
+            <select class="form-select" id="income_currency" name="income_currency" required>
+              <option value="USD">USD ($)</option>
+              <option value="INR">INR (₹)</option>
+              <option value="EUR">EUR (€)</option>
+              <option value="GBP">GBP (£)</option>
+              <option value="JPY">JPY (¥)</option>
+              <option value="AUD">AUD (A$)</option>
+              <option value="CAD">CAD (C$)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Loan Amount -->
+        <div class="col-md-4">
+          <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-piggy-bank-fill"></i></span>
+            <input type="number" class="form-control" id="loan" name="loan_amnt" placeholder="Loan Amount" required>
+          </div>
+        </div>
+
+        <!-- Loan Currency -->
+        <div class="col-md-4">
+          <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-currency-exchange"></i></span>
+            <select class="form-select" id="loan_currency" name="loan_currency" required>
+              <option value="USD">USD ($)</option>
+              <option value="INR">INR (₹)</option>
+              <option value="EUR">EUR (€)</option>
+              <option value="GBP">GBP (£)</option>
+              <option value="JPY">JPY (¥)</option>
+              <option value="AUD">AUD (A$)</option>
+              <option value="CAD">CAD (C$)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Loan % of Income -->
+        <div class="col-md-4">
+          <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-pie-chart-fill"></i></span>
+            <input type="number" step="0.01" class="form-control" id="loan_percent_income" name="loan_percent_income" placeholder="% of Income" readonly>
+          </div>
+        </div>
+
+        <!-- Loan Intent -->
+        <div class="col-md-4">
+          <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-journal-text"></i></span>
+            <select class="form-select" name="loan_intent" required>
+              <option value="">Loan Intent</option>
+              <option value="Personal">Personal</option>
+              <option value="Education">Education</option>
+              <option value="Home">Home</option>
+              <option value="Business">Business</option>
+              <option value="Medical">Medical</option>
+              <option value="Debt Consolidation">Debt Consolidation</option>
+              <option value="Car">Car</option>
+              <option value="Vacation">Vacation</option>
+              <option value="Wedding">Wedding</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Hidden USD fields -->
+        <input type="hidden" name="income_usd" id="income_usd">
+        <input type="hidden" name="loan_usd" id="loan_usd">
+
+        <!-- Experience -->
+        <div class="col-md-4">
+          <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-briefcase-fill"></i></span>
+            <input type="number" class="form-control" name="person_emp_exp" placeholder="Experience (yrs)" required>
+          </div>
+        </div>
+
+        <!-- Home Ownership -->
+        <div class="col-md-4">
+          <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-house-door-fill"></i></span>
+            <select class="form-select" name="person_home_ownership" required>
+              <option value="">Home Ownership</option>
+              <option value="Rent">Rent</option>
+              <option value="Own">Own</option>
+              <option value="Mortgage">Mortgage</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Credit History -->
+        <div class="col-md-4">
+          <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-stopwatch-fill"></i></span>
+            <input type="number" class="form-control" name="cb_person_cred_hist_length" placeholder="Credit History (yrs)" required>
+          </div>
+        </div>
+
+        <!-- Credit Score -->
+        <div class="col-md-4">
+          <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-award-fill"></i></span>
+            <input type="number" class="form-control" name="credit_score" placeholder="Credit Score" required>
+          </div>
+        </div>
+
+        <!-- Previous Loan Default -->
+        <div class="col-md-4">
+          <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-x-circle-fill"></i></span>
+            <select class="form-select" name="previous_loan_defaults_on_file" required>
+              <option value="">Previous Loan Default?</option>
+              <option value="No">No</option>
+              <option value="Yes">Yes</option>
+            </select>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="text-center mt-4">
+        <button type="submit" class="btn btn-custom w-50">🔍 Predict Loan</button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    const rates = {
+      "USD": 1,
+      "INR": 0.012,
+      "EUR": 1.08,
+      "GBP": 1.27,
+      "JPY": 0.0069,
+      "AUD": 0.66,
+      "CAD": 0.74
+    };
+
+    const form = document.getElementById("loanForm");
+    const incomeField = document.getElementById("income");
+    const loanField = document.getElementById("loan");
+    const percentField = document.getElementById("loan_percent_income");
+    const incomeUsdField = document.getElementById("income_usd");
+    const loanUsdField = document.getElementById("loan_usd");
+
+    function updateFields() {
+      const incomeCurrency = document.getElementById("income_currency").value;
+      const loanCurrency = document.getElementById("loan_currency").value;
+      const incomeRate = rates[incomeCurrency] || 1;
+      const loanRate = rates[loanCurrency] || 1;
+      const income = parseFloat(incomeField.value);
+      const loan = parseFloat(loanField.value);
+
+      if (!isNaN(income)) {
+        incomeUsdField.value = (income * incomeRate).toFixed(2);
+      }
+      if (!isNaN(loan)) {
+        loanUsdField.value = (loan * loanRate).toFixed(2);
+      }
+      if (!isNaN(income) && !isNaN(loan) && income > 0) {
+        percentField.value = ((loan / income) * 100).toFixed(2);
+      } else {
+        percentField.value = "";
+      }
+    }
+
+    incomeField.addEventListener("input", updateFields);
+    loanField.addEventListener("input", updateFields);
+    document.getElementById("income_currency").addEventListener("change", updateFields);
+    document.getElementById("loan_currency").addEventListener("change", updateFields);
+    form.addEventListener("submit", updateFields);
+  </script>
+</body>
+</html>
