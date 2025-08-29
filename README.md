@@ -35,10 +35,10 @@ This project demonstrates how ML can be applied in finance for **risk assessment
 ## 🖼️ Screenshots  
 
 ### Loan Application Form  
-![Loan Form]("C:\Users\Lenovo\OneDrive\Pictures\Screenshots\Screenshot 2025-08-30 002623.png")
+![Loan Form](screenshot/loan_form.png)
 
 ### Prediction Result  
-![Result Page]("C:\Users\Lenovo\OneDrive\Pictures\Screenshots\Screenshot 2025-08-30 002728.png")
+![Result Page](screenshot/result_page.png)
 
 ---
 
