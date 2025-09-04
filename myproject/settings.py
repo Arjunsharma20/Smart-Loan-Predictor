@@ -8,7 +8,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 model_path = os.path.join(BASE_DIR, 'ml_model.pkl')
 
 # SECURITY
-SECRET_KEY = os.environ.get('SECRET_KEY', 'your-default-secret-key')
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-7s!omdlri#p0-&av2*1d4vj6zp6*1x7auhf+q%@zbwmem*25fe')
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
 # Allow Render hosts
